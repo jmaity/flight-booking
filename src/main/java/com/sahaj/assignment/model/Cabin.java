@@ -1,10 +1,10 @@
 package com.sahaj.assignment.model;
 
 public enum Cabin {
-    ECONOMY ("Economy"),
-    PREMIUM_ECONOMY("Premium Economy"),
-    BUSINESS ("Business"),
-    FIRST("First");
+    Economy("Economy"),
+    Premium_Economy("Premium Economy"),
+    Business("Business"),
+    First("First");
 
     private String cabinName;
 

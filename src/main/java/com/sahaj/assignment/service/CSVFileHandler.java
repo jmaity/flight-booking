@@ -7,6 +7,7 @@ import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.sahaj.assignment.model.PassengerDetail;
+import com.sahaj.assignment.utility.Constants;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -19,6 +20,8 @@ public class CSVFileHandler implements FileHandler {
     public List<PassengerDetail> readFileDate(String fileName) throws FileNotFoundException {
         List<PassengerDetail> passengerDetailList = new CsvToBeanBuilder(new FileReader(fileName))
                 .withType(PassengerDetail.class)
+                .withIgnoreLeadingWhiteSpace(true)
+                .withSkipLines(1)
                 .build()
                 .parse();
 
@@ -26,13 +29,18 @@ public class CSVFileHandler implements FileHandler {
     }
 
     @Override
-    public void writeFileData(List<?> objects, String fileName, Class c) throws IOException {
+    public void writeFileData(List<?> objects, String fileName, Class c, String header) throws IOException {
         FileWriter writer = new FileWriter(fileName);
+        try {
         ColumnPositionMappingStrategy mappingStrategy = new ColumnPositionMappingStrategy();
         mappingStrategy.setType(c);
+        writer.append(header);
+        writer.append("\n");
         StatefulBeanToCsvBuilder<Object> builder = new StatefulBeanToCsvBuilder<Object>(writer);
-        StatefulBeanToCsv beanWriter = builder.withMappingStrategy(mappingStrategy).build();
-        try {
+        StatefulBeanToCsv beanWriter = builder.withMappingStrategy(mappingStrategy)
+                .withApplyQuotesToAll(false)
+                .build();
+
             beanWriter.write(objects);
         } catch (CsvDataTypeMismatchException e) {
             e.printStackTrace();

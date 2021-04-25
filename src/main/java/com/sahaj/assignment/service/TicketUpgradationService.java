@@ -15,18 +15,15 @@ public class TicketUpgradationService {
 
     private FileHandler fileHandler = new CSVFileHandler();
 
-    public void upgradeTicket(String inputFilePath, String outputFilePath){
+    public void upgradeTicket(String inputFilePath, String validOutputFilePath, String invalidOutputFilePath){
         try {
             List<PassengerDetail> passengerDetails = fileHandler.readFileDate(inputFilePath);
-            passengerDetails.forEach(passenger -> {
-                System.out.println(passenger.getLastName());
-            });
             List<InvalidPassengerDetail> invalidPassengerDetails = new ArrayList<>();
             List<ValidPassengerDetail> validPassengerDetails = new ArrayList<>();
             validatePassengerDetails(passengerDetails, validPassengerDetails, invalidPassengerDetails);
             calculateDiscountCode(validPassengerDetails);
-            fileHandler.writeFileData(validPassengerDetails, outputFilePath, ValidPassengerDetail.class);
-            fileHandler.writeFileData(invalidPassengerDetails, "output_invalid.csv", InvalidPassengerDetail.class);
+            fileHandler.writeFileData(validPassengerDetails, validOutputFilePath, ValidPassengerDetail.class, Constants.PROCESSED_FILE_HEADER);
+            fileHandler.writeFileData(invalidPassengerDetails, invalidOutputFilePath, InvalidPassengerDetail.class, Constants.FAILED_FILE_HEADER);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface FileHandler {
     public List<PassengerDetail> readFileDate(String fileName) throws FileNotFoundException;
-    public void writeFileData (List<?> objects, String fileName, Class c) throws IOException;
+    public void writeFileData (List<?> objects, String fileName, Class c, String header) throws IOException;
 }
