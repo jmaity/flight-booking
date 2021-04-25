@@ -6,6 +6,7 @@ import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+import com.sahaj.assignment.exception.FlightBookingException;
 import com.sahaj.assignment.model.PassengerDetail;
 import com.sahaj.assignment.utility.Constants;
 
@@ -29,24 +30,25 @@ public class CSVFileHandler implements FileHandler {
     }
 
     @Override
-    public void writeFileData(List<?> objects, String fileName, Class c, String header) throws IOException {
+    public void writeFileData(List<?> objects, String fileName, Class c, String header) throws IOException, FlightBookingException {
         FileWriter writer = new FileWriter(fileName);
         try {
-        ColumnPositionMappingStrategy mappingStrategy = new ColumnPositionMappingStrategy();
-        mappingStrategy.setType(c);
-        writer.append(header);
-        writer.append("\n");
-        StatefulBeanToCsvBuilder<Object> builder = new StatefulBeanToCsvBuilder<Object>(writer);
-        StatefulBeanToCsv beanWriter = builder.withMappingStrategy(mappingStrategy)
-                .withApplyQuotesToAll(false)
-                .build();
+            ColumnPositionMappingStrategy mappingStrategy = new ColumnPositionMappingStrategy();
+            mappingStrategy.setType(c);
+            writer.append(header);
+            writer.append("\n");
+            StatefulBeanToCsvBuilder<Object> builder = new StatefulBeanToCsvBuilder<Object>(writer);
+            StatefulBeanToCsv beanWriter = builder.withMappingStrategy(mappingStrategy)
+                    .withApplyQuotesToAll(false)
+                    .build();
 
             beanWriter.write(objects);
         } catch (CsvDataTypeMismatchException e) {
-            e.printStackTrace();
+           throw new FlightBookingException(e);
         } catch (CsvRequiredFieldEmptyException e) {
-            e.printStackTrace();
+           throw new FlightBookingException(e);
+        } finally {
+            writer.close();
         }
-        writer.close();
     }
 }

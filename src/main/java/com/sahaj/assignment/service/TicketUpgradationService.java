@@ -1,5 +1,6 @@
 package com.sahaj.assignment.service;
 
+import com.sahaj.assignment.exception.FlightBookingException;
 import com.sahaj.assignment.model.InvalidPassengerDetail;
 import com.sahaj.assignment.model.PassengerDetail;
 import com.sahaj.assignment.model.ValidPassengerDetail;
@@ -15,7 +16,7 @@ public class TicketUpgradationService {
 
     private FileHandler fileHandler = new CSVFileHandler();
 
-    public void upgradeTicket(String inputFilePath, String validOutputFilePath, String invalidOutputFilePath){
+    public void upgradeTicket(String inputFilePath, String validOutputFilePath, String invalidOutputFilePath) throws FlightBookingException {
         try {
             List<PassengerDetail> passengerDetails = fileHandler.readFileDate(inputFilePath);
             List<InvalidPassengerDetail> invalidPassengerDetails = new ArrayList<>();
@@ -26,9 +27,9 @@ public class TicketUpgradationService {
             fileHandler.writeFileData(invalidPassengerDetails, invalidOutputFilePath, InvalidPassengerDetail.class, Constants.FAILED_FILE_HEADER);
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+           throw new FlightBookingException("Input file not found", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new FlightBookingException(e);
         }
     }
 

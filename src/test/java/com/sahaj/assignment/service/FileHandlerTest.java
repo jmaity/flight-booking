@@ -1,5 +1,6 @@
 package com.sahaj.assignment.service;
 
+import com.sahaj.assignment.exception.FlightBookingException;
 import com.sahaj.assignment.model.Cabin;
 import com.sahaj.assignment.model.PassengerDetail;
 import org.junit.After;
@@ -54,7 +55,7 @@ public class FileHandlerTest {
     }
 
     @Test
-    public void testWriteFile() throws IOException, ParseException {
+    public void testWriteFile() throws IOException, ParseException, FlightBookingException {
         List<PassengerDetail> passengerDetailList = new ArrayList<>();
         passengerDetailList.add(passengerDetail);
         fileHandler.writeFileData(passengerDetailList, "fileWriteTest.csv", PassengerDetail.class, HEADER);

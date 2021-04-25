@@ -1,6 +1,6 @@
 package com.sahaj.assignment.service;
 
-import com.opencsv.bean.CsvToBeanBuilder;
+import com.sahaj.assignment.exception.FlightBookingException;
 import com.sahaj.assignment.model.Cabin;
 import com.sahaj.assignment.model.InvalidPassengerDetail;
 import com.sahaj.assignment.model.PassengerDetail;
@@ -11,12 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class TicketUpgradationServiceTest {
@@ -31,7 +28,7 @@ public class TicketUpgradationServiceTest {
     }
 
     @Test
-    public void readData() throws FileNotFoundException {
+    public void readData() throws  FlightBookingException {
         ticketUpgradationService.upgradeTicket("inputFile.csv", "validOutput.csv", "invalidOutput.csv");
         File valid = new File("validOutput.csv");
         File invalid = new File("invalidOutput.csv");
